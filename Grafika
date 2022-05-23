@@ -1,0 +1,387 @@
+#include <stdio.h>
+#include <windows.h>
+#include <conio.h>
+#include <iostream>
+#include <cmath>
+#include <windows.h>
+
+const int START_CORDINATE = 10;
+const int DEFAULT_SIZE = 10;
+const int DEFAULT_WIDTH = 10;
+const int DEFAULT_HEIGHT = 10;
+
+int L[75][40];
+
+
+void makePoint(HDC hDC, int x, int y, int size, int width, int height) {
+    POINT p1, p2;
+    p1.x = START_CORDINATE + size * x;
+    p1.y = START_CORDINATE + (height - 1) * size - size * y;
+    p2.x = p1.x + size;
+    p2.y = p1.y + size;
+    L[x][y] = 1;
+    Ellipse(hDC, p1.x, p1.y, p2.x, p2.y);
+    Sleep(30);
+}
+
+void makeGrig(HDC hDC, int size, int width, int height) {
+    system("cls");
+
+    POINT drawPoint;
+    POINT startPoint;
+    int i;
+
+    HPEN cP = CreatePen(PS_SOLID, 2, RGB(150, 150, 150));
+    SelectObject(hDC, cP);
+    POINT p;
+
+    startPoint.x = startPoint.y = START_CORDINATE;
+
+    for (i = 0; i <= height; i++) // Начертим горизонтальные
+    {
+        MoveToEx(hDC, startPoint.x, startPoint.y, &p);
+        LineTo(hDC, startPoint.x + width * size, startPoint.y);
+
+        startPoint.y += size;
+
+    }
+
+    startPoint.x = startPoint.y = START_CORDINATE;
+    for (i = 0; i <= width; i++) // Начертим горизонтальные
+    {
+        MoveToEx(hDC, startPoint.x, startPoint.y, &p);
+        LineTo(hDC, startPoint.x, startPoint.y + height * size);
+
+        startPoint.x += size;
+
+    }
+}
+
+void SelectBrush(HDC hDC, double m) {
+    HPEN Brez1 = CreatePen(PS_SOLID, 2, RGB(255, 255, 255)); // Самая интенсивная
+    HPEN Brez2 = CreatePen(PS_SOLID, 2, RGB(210, 210, 210));
+    HPEN Brez3 = CreatePen(PS_SOLID, 2, RGB(180, 180, 180));
+    HPEN Brez4 = CreatePen(PS_SOLID, 2, RGB(150, 150, 150));
+    HPEN Brez5 = CreatePen(PS_SOLID, 2, RGB(120, 120, 120));
+    HPEN Brez6 = CreatePen(PS_SOLID, 2, RGB(120, 120, 120));
+    HPEN Brez7 = CreatePen(PS_SOLID, 2, RGB(90, 90, 90));
+    HPEN Brez8 = CreatePen(PS_SOLID, 2, RGB(50, 50, 50));
+
+    if (int(m) == 1)
+        SelectObject(hDC, Brez1);
+    else
+        if (int(m) == 2)
+            SelectObject(hDC, Brez2);
+        else
+            if (int(m) == 3)
+                SelectObject(hDC, Brez3);
+            else
+                if (int(m) == 4)
+                    SelectObject(hDC, Brez4);
+                else
+                    if (int(m) == 5)
+                        SelectObject(hDC, Brez5);
+                    else
+                        if (int(m) == 6)
+                            SelectObject(hDC, Brez6);
+                        else
+                            if (int(m) == 7)
+                                SelectObject(hDC, Brez7);
+                            else
+                                if (int(m) == 8)
+                                    SelectObject(hDC, Brez8);
+
+}
+
+
+
+
+void Brezenhem(HDC hDC, int x0, int y0, int x1, int y1, int size, int width, int height) {
+
+    int dx, dy, ch = 0, i = 0, e, dx2, dy2;
+
+    x1 -= x0;
+
+    dx = abs(x1);
+
+    y1 -= y0;
+
+    dy = abs(y1);
+
+    if (!x1 && !y1)
+
+        return; // Если начало совпадает с концом отрезка
+
+    if (x1) x1 = x1 < 0 ? -1 : 1;
+
+    if (y1) y1 = y1 < 0 ? -1 : 1;
+
+    if (dy > dx) { // Меняем местами x и y
+
+        int t = dy;
+
+        dy = dx;
+
+        dx = t;
+
+        ch = 1;
+
+    }
+
+    dx2 = dx << 1;
+
+    dy2 = dy << 1; // dx2 = 2*dx; dy2 = 2*dy;
+
+    e = dy2 - dx; // Качальное значение ошибки;
+
+    for (i = 0; i < dx; ++i)
+
+    {
+
+        // putpixel(x0, y0, c);
+
+        makePoint(hDC, x0, y0, size, width, height);
+
+        if (e > 0) {
+
+            if (ch) x0 += x1;
+
+            else y0 += y1;
+
+            e -= dx2;
+
+        }
+
+        else {
+
+            if (ch) y0 += y1;
+
+            else x0 += x1;
+
+            e += dy2;
+
+        }
+
+    }
+
+}
+
+void line(HDC hDC, int x0, int y0, int x1, int y1, int size, int width, int height) {
+
+    int dx, dy, ch = 0, i = 0, e, dx2, dy2;
+
+    x1 -= x0;
+
+    dx = abs(x1);
+
+    y1 -= y0;
+
+    dy = abs(y1);
+
+    if (!x1 && !y1)
+
+        return; // Если начало совпадает с концом отрезка
+
+    if (x1) x1 = x1 < 0 ? -1 : 1;
+
+    if (y1) y1 = y1 < 0 ? -1 : 1;
+
+    if (dy > dx) { // Меняем местами x и y
+
+        int t = dy;
+
+        dy = dx;
+
+        dx = t;
+
+        ch = 1;
+
+    }
+
+    dx2 = dx << 1;
+
+    dy2 = dy << 1; // dx2 = 2*dx; dy2 = 2*dy;
+
+    e = dy2 - dx; // Качальное значение ошибки;
+
+    for (i = 0; i < dx; ++i)
+
+    {
+
+        // putpixel(x0, y0, c);
+
+        makePoint(hDC, x0, y0, size, width, height);
+        L[x0][y0] = 2;
+
+        if (e > 0) {
+
+            if (ch) x0 += x1;
+
+            else y0 += y1;
+
+            e -= dx2;
+
+        }
+
+        else {
+
+            if (ch) y0 += y1;
+
+            else x0 += x1;
+
+            e += dy2;
+
+        }
+
+    }
+
+}
+
+void sorttreug(HDC hDC, int Ax, int Ay, int Bx, int By, int Cx, int Cy, int size, int width, int height)
+{
+    int tmp;
+    int X[3] = { Ax,Bx,Cx };
+    int Y[3] = { Ay,By,Cy };
+    for (int i = 0; i < 2; i++)
+        for (int j = 0; j < 2; j++)
+            if (Y[j] < Y[j + 1])
+            {
+                tmp = Y[j + 1];
+                Y[j + 1] = Y[j];
+                Y[j] = tmp;
+                tmp = X[j + 1];
+                X[j + 1] = X[j];
+                X[j] = tmp;
+            }
+    Cy = Y[0]; By = Y[1]; Ay = Y[2];
+    Cx = X[0]; Bx = X[1]; Ax = X[2];
+    int x1, x2;
+    for (int sy = Ay; sy <= Cy; sy++)
+    {
+        x1 = Ax + (sy - Ay) * (Cx - Ax) / (Cy - Ay);
+        if (sy < By)
+            x2 = Ax + (sy - Ay) * (Bx - Ax) / (By - Ay);
+        else
+        {
+            if (Cy == By)
+                x2 = Bx;
+            else
+                x2 = Bx + (sy - By) * (Cx - Bx) / (Cy - By);
+        }
+        if (x1 > x2)
+        {
+            tmp = x1;
+            x1 = x2;
+            x2 = tmp;
+        }
+        Brezenhem(hDC, x1, sy + 1, x2, sy + 1, size, width, height);
+    }
+}
+
+
+void circle(HDC hDC, int x0, int y0, int radius, int size, int width, int height) {
+
+    int x = 0, y = radius, gap = 0, delta = (2 - 2 * radius);
+
+    while (y >= 0)
+
+    {
+
+        makePoint(hDC, x0 + x, y0 + y, size, width, height);
+
+        makePoint(hDC, x0 + x, y0 - y, size, width, height);
+
+        makePoint(hDC, x0 - x, y0 - y, size, width, height);
+
+        makePoint(hDC, x0 - x, y0 + y, size, width, height);
+
+        gap = 2 * (delta + y) - 1;
+
+        if (delta < 0 && gap <= 0)
+
+        {
+
+            x++;
+
+            delta += 2 * x + 1;
+
+            continue;
+
+        }
+
+        if (delta > 0 && gap > 0)
+
+        {
+
+            y--;
+
+            delta -= 2 * y + 1;
+
+            continue;
+
+        }
+
+        x++;
+
+        delta += 2 * (x - y);
+
+        y--;
+
+    }
+}
+
+
+int LineFill(HDC hDC, int x, int y, int dir, int PrevXl, int
+    PrevXr, int L[75][40], int BolderColor, int Color, int size, int width, int height)
+{
+    int xl = x;
+    int xr = x;
+    int c;
+    do
+        c = L[--xl][y];
+    while ((c != BolderColor) && (c != Color));
+    do
+        c = L[++xr][y];
+    while ((c != BolderColor) && (c != Color));
+    xl++;
+    xr--;
+    line(hDC, xl, y, xr + 1, y, size, width, height);
+    for (x = xl; x <= xr; x++)
+    {
+        c = L[x][y + dir];
+        if ((c != BolderColor) && (c != Color))
+            x = LineFill(hDC, x, y + dir, dir, xl,
+                xr, L, BolderColor, Color, size, width, height);
+    }
+    for (x = xl; x < PrevXl; x++)
+    {
+        c = L[x][y - dir];
+        if ((c != BolderColor) && (c != Color))
+            x = LineFill(hDC, x, y - dir, -
+                dir, xl, xr, L, BolderColor, Color, size, width, height);
+    }
+    for (x = PrevXr; x < xr; x++)
+    {
+        c = L[x][y - dir];
+        if ((c != BolderColor) && (c != Color))
+            x = LineFill(hDC, x, y - dir, -dir, xl,
+                xr, L, BolderColor, Color, size, width, height);
+    }
+    return xr;
+}
+
+
+
+void main() {
+
+
+
+
+    HWND hWnd = GetConsoleWindow();
+    HDC hDC = GetDC(hWnd);
+
+    RECT rt; // Структураспол¤ми left, top, right, bottom
+    GetClientRect(hWnd, &rt); // Полуили размер окна
+
+    HPEN Brez1 = CreatePen(PS_SOLID, 2, RGB(255, 255, 255));
+    SelectObject(hDC, Brez1);
