@@ -104,4 +104,6 @@
   
   [Inst](https://www.instagram.com/mihailkpavlov)
   - - -
-  [VK](https://vk.com/lavrikpavlov)
+  Казан Михаил:        [VK](https://vk.com/lavrikpavlov)
+  - - -
+  Кирилл Тресвятский:  [VK](https://vk.com/singylarity)
