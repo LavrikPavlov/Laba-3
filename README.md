@@ -96,7 +96,7 @@
   
  ~~А вот четвертого не будет~~
   
-  ## Фотка с котом
+  ## Фотка с котом - смешная
   
 ![picture alt](https://newperexod.com/wp-content/uploads/2021/03/kupatsya-04.jpg)
   
